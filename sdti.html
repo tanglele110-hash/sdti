@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SDTI - 苦逼设计师人格测试</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#000000;--bg2:#0a0a0a;--bg3:#111111;--surface:#0d0d0d;
+  --text:#f0f0f0;--text2:#a8a8a8;--text3:#7a7a7a;
+  --accent:#ffffff;--accent-dim:#333333;
+  --border:rgba(255,255,255,.1);--border-strong:rgba(255,255,255,.2);
+  --radius:2px;--radius-sm:2px;
+  --pie:#e07850;--frag:#5abfb5;--tefl:#c49a30;--copy:#9589d6;
+  --char:#e05a70;--scap:#c96a48;--mule:#45b86a;--hole:#609fe0;
+  --chil:#b88ed8;--cave:#909090;
+}
+
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;font-size:15px;overflow-x:hidden;-webkit-tap-highlight-color:transparent;touch-action:pan-y;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+
+.container{max-width:720px;margin:0 auto;padding:0 32px}
+
+/* ===== HOME ===== */
+#home{text-align:center;padding:120px 0 100px}
+.hero-badge{display:inline-flex;align-items:center;padding:5px 14px;border:1px solid var(--border);font-size:.72rem;font-weight:500;color:var(--text2);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:36px;font-family:'JetBrains Mono',monospace}
+.hero-title{font-size:clamp(4rem,10vw,7rem);font-weight:900;letter-spacing:-6px;line-height:.95;color:var(--text);margin-bottom:16px;font-family:'Inter',sans-serif}
+.hero-title span{color:var(--accent)}
+.hero-subtitle{font-size:.82rem;font-weight:400;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.hero-cn{font-size:clamp(1.1rem,2.5vw,1.4rem);font-weight:600;color:var(--text2);margin-bottom:44px;letter-spacing:2px}
+.hero-desc{font-size:1rem;color:var(--text2);max-width:460px;margin:0 auto 56px;line-height:1.85;font-weight:300}
+
+.cta-wrap{display:inline-block;position:relative;margin-top:0}
+.cta-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 44px;font-size:.92rem;font-weight:600;color:#fff;background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:all .3s ease;border-radius:12px;font-family:'Inter',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}
+.cta-btn:hover{background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08));border-color:rgba(255,255,255,.4);box-shadow:0 12px 40px rgba(0,0,0,.35);transform:translateY(-1px)}
+.cta-btn:active{transform:scale(.98) translateY(0)}
+
+.type-showcase{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:64px;padding-top:48px;border-top:1px solid var(--border)}
+.type-pill{padding:6px 14px;font-size:.72rem;font-weight:400;border:1px solid var(--border);background:transparent;cursor:default;color:var(--text3);transition:all .2s;font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
+.type-pill:hover{color:var(--text);border-color:var(--border-strong)}
+.type-pill .code{font-weight:600;margin-right:5px}
+
+/* ===== QUIZ ===== */
+#quiz{display:none;padding:24px 0 80px}
+.quiz-sticky{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);padding:18px 0 14px;margin:0 -32px;padding-left:32px;padding-right:32px;border-bottom:1px solid var(--border);padding-top:calc(18px + env(safe-area-inset-top))}
+.progress-wrap{margin-bottom:12px}
+.progress-track{height:3px;background:var(--bg3);overflow:hidden;position:relative}
+.progress-bar{height:100%;background:var(--accent);transition:width .4s ease}
+.progress-bar::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:rgba(255,255,255,.5);animation:shimmer 2s ease-in-out infinite}
+@keyframes shimmer{0%,100%{opacity:.3}50%{opacity:1}}
+.quiz-meta{display:flex;justify-content:space-between;align-items:center}
+.quiz-counter{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:500;color:var(--text2);letter-spacing:-.3px}
+.quiz-counter .num{font-size:1.3rem;font-weight:700;color:var(--accent)}
+.quiz-model{font-family:'JetBrains Mono',monospace;display:inline-flex;align-items:center;padding:3px 11px;border:1px solid var(--border);font-size:.68rem;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
+
+.q-card{background:var(--surface);border:1px solid var(--border);padding:36px 32px;margin-bottom:16px;transition:border-color .25s}
+.q-card:hover{border-color:var(--border-strong)}
+.q-dim-tag{display:inline-block;font-size:.68rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:18px;font-family:'JetBrains Mono',monospace}
+.q-text{font-size:1.15rem;font-weight:500;line-height:1.6;color:var(--text);margin-bottom:28px;letter-spacing:-.15px}
+
+.opt-list{display:flex;flex-direction:column;gap:8px}
+.opt-item{display:flex;align-items:center;gap:14px;padding:15px 20px;border:1px solid var(--border);background:transparent;cursor:pointer;transition:all .15s ease;font-size:.92rem;color:var(--text2);line-height:1.45}
+.opt-item:hover{border-color:var(--border-strong);color:var(--text)}
+.opt-item.selected{border-color:var(--accent);color:var(--text);background:rgba(255,255,255,.02)}
+.opt-key{width:28px;height:28px;border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.76rem;color:var(--text3);flex-shrink:0;font-family:'JetBrains Mono',monospace;transition:all .15s}
+.opt-item.selected .opt-key{border-color:var(--accent);background:var(--accent);color:#000}
+
+.quiz-nav{display:flex;justify-content:space-between;gap:16px;margin:28px 0 48px}
+.nav-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;font-size:.86rem;font-weight:500;cursor:pointer;transition:all .25s ease;border:1px solid rgba(255,255,255,.2);color:var(--text);text-transform:uppercase;letter-spacing:.5px;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border-radius:10px;backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);box-shadow:0 4px 20px rgba(0,0,0,.25),inset 0 1px 1px rgba(255,255,255,.12),inset 0 -1px 2px rgba(0,0,0,.1);overflow:hidden}
+.nav-btn::after{content:'';position:absolute;top:2px;left:3px;right:3px;height:35%;border-radius:8px 8px 50% 50%;background:linear-gradient(180deg,rgba(255,255,255,.08),transparent);pointer-events:none}
+.nav-btn:hover:not(:disabled){border-color:rgba(255,255,255,.35);background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.05));box-shadow:0 6px 24px rgba(0,0,0,.3)}
+.nav-btn.primary{background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.06));border-color:rgba(255,255,255,.35);font-weight:600;color:#fff}
+.nav-btn.primary:hover{box-shadow:0 8px 28px rgba(0,0,0,.32);transform:translateY(-1px)}
+.nav-btn:disabled{opacity:.25;cursor:not-allowed}
+
+/* ===== RESULT ===== */
+#result{display:none;padding:48px 0 100px}
+.result-wrap{background:var(--surface);border:1px solid var(--border);padding:56px 40px;position:relative;overflow:hidden}
+.result-accent-bar{position:absolute;top:0;left:0;right:0;height:2px}
+
+.result-label{display:inline-flex;align-items:center;padding:4px 14px;border:1px solid var(--border);font-size:.68rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.result-code{font-size:clamp(3.5rem,9vw,5.5rem);font-weight:900;letter-spacing:8px;line-height:1;margin-bottom:4px;font-family:'Inter',sans-serif}
+.result-name{font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:300;color:var(--text2);margin-bottom:28px;letter-spacing:1px}
+.result-bio{font-size:.94rem;color:var(--text2);line-height:1.9;max-width:520px;margin:0 auto 40px;text-align:left;font-weight:300}
+
+.trait-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:32px 0}
+.trait-cell{padding:13px 10px;border:1px solid var(--border);text-align:center;transition:border-color .2s}
+.trait-cell:hover{border-color:var(--border-strong)}
+.trait-cell-text{font-size:.78rem;font-weight:500;color:var(--text2)}
+
+.ranking-section{margin-top:44px;text-align:left}
+.ranking-h{font-size:.75rem;font-weight:500;color:var(--text3);margin-bottom:14px;text-transform:uppercase;letter-spacing:2px;font-family:'JetBrains Mono',monospace}
+.rank-row{display:flex;align-items:center;gap:12px;padding:10px 14px;margin-bottom:4px;transition:background .15s}
+.rank-row:nth-child(odd){background:rgba(255,255,255,.01)}
+.rank-row.top-rank{border-left:2px solid var(--accent);background:rgba(255,255,255,.03)!important}
+.rank-num{width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;flex-shrink:0;font-family:'JetBrains Mono',monospace;color:var(--text3)}
+.rank-num.n1{color:var(--accent)}.rank-name{font-weight:500;font-size:.84rem;flex:1}
+.rank-meter{width:60px;height:3px;background:var(--bg3);flex-shrink:0;overflow:hidden}
+.rank-fill{height:100%;transition:width .8s ease}
+.rank-pct{font-size:.7rem;color:var(--text3);font-weight:500;width:34px;text-align:right;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+
+.dim-section{margin-top:44px;padding-top:28px;border-top:1px solid var(--border);text-align:left}
+.dim-h{font-size:.75rem;font-weight:500;color:var(--text3);margin-bottom:16px;text-transform:uppercase;letter-spacing:2px;font-family:'JetBrains Mono',monospace}
+.dim-line{display:flex;align-items:center;gap:12px;padding:6px 0}
+.dim-n{width:80px;flex-shrink:0;font-size:.78rem;color:var(--text3);font-weight:400}
+.dim-badge{display:inline-flex;align-items:center;justify-content:center;width:30px;height:20px;font-size:.64rem;font-weight:600;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.dim-badge.L{color:var(--mule)}.dim-badge.M{color:var(--tefl)}.dim-badge.H{color:var(--pie)}
+.dim-track{flex:1;height:3px;background:var(--bg3);overflow:hidden}
+.dim-fill{height:100%;transition:width .8s ease}
+
+.retest-wrap{margin-top:48px}
+.retest-btn{position:relative;display:inline-flex;align-items:center;gap:6px;padding:13px 34px;font-size:.86rem;font-weight:500;color:var(--text2);border:1px solid rgba(255,255,255,.2);cursor:pointer;transition:all .25s ease;text-transform:uppercase;letter-spacing:.5px;font-family:'JetBrains Mono',monospace;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border-radius:10px;backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);box-shadow:0 4px 20px rgba(0,0,0,.22),inset 0 1px 1px rgba(255,255,255,.1),inset 0 -1px 2px rgba(0,0,0,.08);overflow:hidden}
+.retest-btn::after{content:'';position:absolute;top:2px;left:3px;right:3px;height:35%;border-radius:8px 8px 50% 50%;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent);pointer-events:none}
+.retest-btn:hover{border-color:rgba(255,255,255,.35);color:var(--text);background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.04));box-shadow:0 6px 24px rgba(0,0,0,.28)}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+.fade-up{animation:fadeUp .6s ease both}
+.scale-in{animation:scaleIn .5s ease both}
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}.d5{animation-delay:.3s}
+
+@media(max-width:768px){
+  .container{padding:0 24px}
+  #home{padding:80px 0 70px}
+  .hero-badge{font-size:.66rem;padding:4px 12px;letter-spacing:2px}
+  .hero-title{letter-spacing:-4px}
+  .hero-subtitle{font-size:.72rem;letter-spacing:2px}
+  .hero-cn{font-size:1.15rem;margin-bottom:32px}
+  .hero-desc{font-size:.92rem;margin-bottom:44px}
+  .cta-btn{padding:14px 36px;font-size:.86rem}
+  .type-showcase{gap:5px;margin-top:48px;padding-top:36px}
+  .type-pill{padding:5px 11px;font-size:.66rem}
+  .quiz-sticky{margin:0 -24px;padding-left:24px;padding-right:24px}
+  .q-card{padding:28px 24px}
+  .q-text{font-size:1.06rem}
+  .opt-item{padding:13px 16px;gap:12px;font-size:.88rem}
+  .result-wrap{padding:44px 28px}
+  .result-code{letter-spacing:5px}
+  .trait-row{grid-template-columns:repeat(3,1fr);gap:5px}
+  .trait-cell{padding:11px 8px}
+  .rank-row{gap:10px;padding:9px 12px}
+  .dim-n{width:68px;font-size:.74rem}
+}
+
+@media(max-width:480px){
+  html{font-size:14px}
+  body{-webkit-text-size-adjust:100%}
+  .container{padding:0 18px}
+  #home{padding:60px 0 50px}
+  .hero-badge{font-size:.62rem;padding:4px 10px;letter-spacing:1.8px;margin-bottom:24px}
+  .hero-title{font-size:clamp(2.8rem,14vw,4.5rem);letter-spacing:-2.5px;line-height:1}
+  .hero-subtitle{font-size:.65rem;letter-spacing:1.8px;margin-bottom:6px}
+  .hero-cn{font-size:1.05rem;font-weight:600;margin-bottom:28px;letter-spacing:1px}
+  .hero-desc{font-size:.88rem;max-width:100%;line-height:1.8;margin-bottom:36px}
+  .cta-btn{padding:13px 30px;font-size:.84rem;border-radius:10px}
+  .cta-wrap{width:100%}
+  .cta-btn{width:100%;justify-content:center}
+  .type-showcase{flex-direction:column;align-items:center;gap:4px;margin-top:40px;padding-top:32px}
+  .type-pill{padding:5px 12px;font-size:.64rem;width:100%;max-width:260px;text-align:center;justify-content:center;display:inline-flex}
+  .quiz-sticky{margin:0 -18px;padding:14px 0 12px;padding-left:18px;padding-right:18px}
+  .progress-wrap{margin-bottom:10px}
+  .quiz-counter{font-size:.76rem}
+  .quiz-counter .num{font-size:1.2rem}
+  .quiz-model{font-size:.64rem;padding:3px 9px;letter-spacing:1px}
+  .q-card{padding:22px 18px;margin-bottom:12px}
+  .q-dim-tag{font-size:.62rem;margin-bottom:14px;letter-spacing:1.5px}
+  .q-text{font-size:1rem;margin-bottom:22px}
+  .opt-list{gap:7px}
+  .opt-item{padding:12px 14px;gap:11px;font-size:.85rem;min-height:48px;-webkit-tap-highlight-color:transparent}
+  .opt-key{width:26px;height:26px;font-size:.72rem}
+  .quiz-nav{margin:20px 0 36px;gap:12px}
+  .nav-btn{padding:11px 20px;font-size:.8rem;letter-spacing:.3px;border-radius:8px;flex:1}
+  #result{padding:32px 0 60px}
+  .result-wrap{padding:28px 18px}
+  .result-label{font-size:.62rem;padding:3px 11px;letter-spacing:1.5px}
+  .result-code{font-size:clamp(2.6rem,13vw,4rem);letter-spacing:4px}
+  .result-name{font-size:1rem;margin-bottom:20px}
+  .result-bio{font-size:.86rem;line-height:1.85;margin-bottom:28px}
+  .trait-row{grid-template-columns:repeat(2,1fr);gap:5px;margin:24px 0}
+  .trait-cell{padding:10px 7px}
+  .trait-cell-text{font-size:.72rem}
+  .ranking-section{margin-top:32px}
+  .ranking-h{font-size:.68rem;margin-bottom:10px;letter-spacing:1.5px}
+  .rank-row{gap:8px;padding:8px 10px;margin-bottom:3px}
+  .rank-num{width:20px;height:20px;font-size:.64rem}
+  .rank-name{font-size:.78rem}
+  .rank-meter{width:50px}
+  .rank-pct{font-size:.64rem;width:30px}
+  .dim-section{margin-top:32px;padding-top:22px}
+  .dim-h{font-size:.68rem;margin-bottom:12px;letter-spacing:1.5px}
+  .dim-line{gap:8px;padding:5px 0}
+  .dim-n{width:60px;font-size:.7rem}
+  .dim-badge{width:26px;height:17px;font-size:.58rem}
+  .retest-wrap{margin-top:36px;text-align:center}
+  .retest-btn{width:100%;max-width:280px;justify-content:center;padding:12px 28px;font-size:.82rem}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero-badge fade-up">Personality Test</div>
+  <h1 class="hero-title fade-up d1"><span>SDTI</span></h1>
+  <p class="hero-subtitle fade-up d2">Shitty Designer Test of Insanity</p>
+  <p class="hero-cn fade-up d3">苦逼设计师人格测试</p>
+  <p class="hero-desc fade-up d4">
+    你在设计院到底属于哪一种苦命物种？<br>30道灵魂拷问，15维人格画像，精准匹配你的设计师人设。
+  </p>
+  <div class="cta-wrap fade-up d5"><button class="cta-btn" onclick="startQuiz()">开始测试 <span style="font-size:1.1em">→</span></button></div>
+
+  <div class="type-showcase fade-up d5">
+    <span class="type-pill"><span class="code" style="color:var(--pie)">PIE</span>画饼忽悠王</span>
+    <span class="type-pill"><span class="code" style="color:var(--frag)">FRAG</span>脆皮熬夜党</span>
+    <span class="type-pill"><span class="code" style="color:var(--tefl)">TEFL</span>不粘锅大师</span>
+    <span class="type-pill"><span class="code" style="color:var(--copy)">COPY</span>套图艺术家</span>
+    <span class="type-pill"><span class="code" style="color:var(--char)">CHAR</span>底薪慈善家</span>
+    <span class="type-pill"><span class="code" style="color:var(--scap)">SCAP</span>苦逼背锅侠</span>
+    <span class="type-pill"><span class="code" style="color:var(--mule)">MULE</span>勤恳老黄牛</span>
+    <span class="type-pill"><span class="code" style="color:var(--hole)">HOLE</span>专业填坑侠</span>
+    <span class="type-pill"><span class="code" style="color:var(--chil)">CHIL</span>反内卷先锋</span>
+    <span class="type-pill"><span class="code" style="color:var(--cave)">CAVE</span>社恐自闭人</span>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="quiz-sticky">
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-bar" id="progressFill"></div></div></div>
+    <div class="quiz-meta">
+      <span class="quiz-counter"><span class="num" id="qNum">1</span><span style="color:var(--text3)"> / 30</span></span>
+      <span class="quiz-model" id="modelTag">SELF 自我认知</span>
+    </div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="quiz-nav">
+    <button class="nav-btn" id="prevBtn" onclick="prevQuestion()" disabled>← 上一题</button>
+    <button class="nav-btn primary" id="nextBtn" onclick="nextQuestion()">下一题 →</button>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="result">
+  <div class="result-wrap scale-in" id="resultCard">
+    <div class="result-accent-bar" id="accentBar"></div>
+    <div class="result-label" id="resultLabel">Your Diagnosis</div>
+    <div class="result-code" id="resultCode">PIE</div>
+    <div class="result-name" id="resultName">画饼忽悠王</div>
+    <p class="result-bio" id="resultBio"></p>
+    <div class="trait-row" id="traitGrid"></div>
+    <div class="ranking-section" id="matchList"></div>
+    <div class="dim-section" id="dimDetail"></div>
+    <div class="retest-wrap">
+      <button class="retest-btn" onclick="restart()">重新测试 ↺</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+const DIMENSIONS=[
+  {id:'s1',name:'自我定位',model:'SELF',label:'自我认知'},
+  {id:'s2',name:'能力评估',model:'SELF',label:'自我认知'},
+  {id:'s3',name:'职业认同',model:'SELF',label:'自我认知'},
+  {id:'e1',name:'熬夜耐受',model:'EMO',label:'情绪状态'},
+  {id:'e2',name:'压力反应',model:'EMO',label:'情绪状态'},
+  {id:'e3',name:'情绪管理',model:'EMO',label:'情绪状态'},
+  {id:'a1',name:'改图态度',model:'ATT',label:'工作态度'},
+  {id:'a2',name:'甲方应对',model:'ATT',label:'工作态度'},
+  {id:'a3',name:'责任归属',model:'ATT',label:'工作态度'},
+  {id:'ac1',name:'工作节奏',model:'ACT',label:'行为模式'},
+  {id:'ac2',name:'技术依赖',model:'ACT',label:'行为模式'},
+  {id:'ac3',name:'摸鱼策略',model:'ACT',label:'行为模式'},
+  {id:'so1',name:'团队协作',model:'SOC',label:'社交方式'},
+  {id:'so2',name:'汇报表现',model:'SOC',label:'社交方式'},
+  {id:'so3',name:'社交边界',model:'SOC',label:'社交方式'}
+];
+
+const QUESTIONS=[
+  {dim:'s1',q:'在设计院里，你觉得自己扮演的是什么角色？',
+   opts:[{t:'我就是个画图的工具人，领导说啥我干啥',v:1},{t:'我算是团队里的中坚力量，关键时刻能顶上',v:2},{t:'我是项目核心/负责人，方向由我来把控',v:3}]},
+  {dim:'s1',q:'当别人问你在设计院做什么时，你会怎么说？',
+   opts:[{t:'就……画图的呗，没啥好说的',v:1},{t:'我是做XX专业设计的，负责XXX方面',v:2},{t:'我是项目负责人/主创，统筹整个设计流程',v:3}]},
+  {dim:'s2',q:'你觉得自己的设计能力在院里处于什么水平？',
+   opts:[{t:'一般般吧，能完成任务就行',v:1},{t:'还不错，比上不足比下有余',v:2},{t:'相当自信，很多问题只有我能解决',v:3}]},
+  {dim:'s2',q:'面对一个全新的设计任务，你的第一反应是？',
+   opts:[{t:'有点慌，得赶紧查资料找参考',v:1},{t:'还行，按套路来应该没问题',v:2},{t:'来活了，正好展示一下实力',v:3}]},
+  {dim:'s3',q:'如果让你重新选一次职业，你还会选设计吗？',
+   opts:[{t:'绝对不选了，太累了',v:1},{t:'可能会选，但也想试试别的',v:2},{t:'还是会选设计，这是我的热爱',v:3}]},
+  {dim:'s3',q:'看到自己参与设计的项目建成落地，你的感受是？',
+   opts:[{t:'也就那样吧，又没我名字',v:1},{t:'还是挺有成就感的',v:2},{t:'非常自豪！这是我职业生涯的里程碑',v:3}]},
+  {dim:'e1',q:'你对加班熬夜的真实态度是？',
+   opts:[{t:'坚决不熬，到点就走',v:1},{t:'偶尔赶项目可以接受',v:2},{t:'已经习惯了，通宵也无所谓',v:3}]},
+  {dim:'e1',q:'最近一次熬夜加班是因为什么？',
+   opts:[{t:'基本不熬夜，按时下班',v:1},{t:'项目节点到了，不得不赶',v:2},{t:'常态化操作，这周都第三次了',v:3}]},
+  {dim:'e2',q:'甲方/领导突然提出重大修改意见时，你的第一反应？',
+   opts:[{t:'内心崩溃但表面淡定',v:1},{t:'有点烦躁但还是照做了',v:2},{t:'冷静分析可行性，该推就推',v:3}]},
+  {dim:'e2',q:'同时被多个项目催进度的时候，你会？',
+   opts:[{t:'焦虑到失眠，不知道先做哪个',v:1},{t:'排个优先级一个个来',v:2},{t:'统筹安排，甚至还能再接一个',v:3}]},
+  {dim:'e3',q:'方案被否决/改了N版后，你的状态是？',
+   opts:[{t:'心态炸裂，想摔键盘',v:1},{t:'叹口气继续改',v:2},{t:'已经麻木了，改就改吧',v:3}]},
+  {dim:'e3',q:'同事/领导说话难听的时候，你通常怎么处理？',
+   opts:[{t:'当场就想怼回去',v:1},{t:'忍着，事后跟朋友吐槽',v:2},{t:'面带微笑听完，心里毫无波澜',v:3}]},
+  {dim:'a1',q:'同一个地方被要求改了第五遍，你会？',
+   opts:[{t:'直接摆烂，随便改改交差',v:1},{t:'认真对待每一版修改',v:2},{t:'主动沟通找出根本原因，避免反复',v:3}]},
+  {dim:'a1',q:'对于"再微调一下就好"这种话，你的看法是？',
+   opts:[{t:'每次听到都想打人',v:1},{t:'习惯了，设计就是这样',v:2},{t:'我会引导对方明确需求，减少无效修改',v:3}]},
+  {dim:'a2',q:'甲方提出"五彩斑斓的黑"这种要求时，你一般？',
+   opts:[{t:'硬着头皮试几种方案碰运气',v:1},{t:'用专业知识解释为什么不行',v:2},{t:'引导对方说出真实需求，给出更好的替代方案',v:3}]},
+  {dim:'a2',q:'甲方临时加需求但不给延期，你的应对策略是？',
+   opts:[{t:'默默加班做完，不敢反驳',v:1},{t:'尝试沟通争取更多时间',v:2},{t:'明确告知影响范围和风险，让甲方自己做决定',v:3}]},
+  {dim:'a3',q:'项目出了问题（不是你的错），领导追责时你会？',
+   opts:[{t:'默默背锅，不想惹事',v:1},{t:'客观说明情况但不推卸',v:2},{t:'有理有据地说明责任边界，绝不乱背锅',v:3}]},
+  {dim:'a3',q:'同事的工作出错了影响到你的部分，你会怎么做？',
+   opts:[{t:'帮他悄悄修好，不声张',v:1},{t:'告诉他让他自己改',v:2},{t:'记录下来并汇报，同时协助解决',v:3}]},
+  {dim:'ac1',q:'你的日常工作节奏更接近哪种模式？',
+   opts:[{t:'慢悠悠的，不急不躁',v:1},{t:'有张有弛，忙闲交替',v:2},{t:'高效紧凑，一天能干完别人三天的活',v:3}]},
+  {dim:'ac1',q:'deadline临近时的效率变化是？',
+   opts:[{t:'越急越慢，手忙脚乱',v:1},{t:'正常发挥，按计划推进',v:2},{t:'爆发式提升，最后时刻产出最高',v:3}]},
+  {dim:'ac2',q:'开始一个新项目时，你首先会做什么？',
+   opts:[{t:'从零开始构思原创方案',v:1},{t:'找几个类似项目的参考案例',v:2},{t:'直接打开之前的模板套一套',v:3}]},
+  {dim:'ac2',q:'你对CAD/SU/Rhino等软件插件和图库的依赖程度？',
+   opts:[{t:'基本不用插件，纯手搓',v:1},{t:'偶尔用用提高效率',v:2},{t:'没有插件和素材库我根本没法干活',v:3}]},
+  {dim:'ac3',q:'你在工作时间摸鱼的频率大概是？',
+   opts:[{t:'几乎不摸鱼，一直在干活',v:1},{t:'每天摸一小会儿放松下',v:2},{t:'摸鱼是我的工作常态',v:3}]},
+  {dim:'ac3',q:'你最喜欢的摸鱼方式是？',
+   opts:[{t:'刷手机看新闻/短视频',v:1},{t:'跟同事聊天摸鱼',v:2},{t:'假装很忙其实在发呆或搞副业',v:3}]},
+  {dim:'so1',q:'团队里需要有人承担额外工作时，你通常会？',
+   opts:[{t:'尽量躲开，不关我事',v:1},{t:'看情况，不太过分就帮一把',v:2},{t:'主动站出来分担，大家都不容易',v:3}]},
+  {dim:'so1',q:'新同事向你请教问题时，你的态度是？',
+   opts:[{t:'简单说两句，不想多费口舌',v:1},{t:'耐心解答，但不会太深入',v:2},{t:'倾囊相授，甚至会整理成文档分享',v:3}]},
+  {dim:'so2',q:'向领导/甲方汇报方案时，你的风格是？',
+   opts:[{t:'紧张结巴，只想快点结束',v:1},{t:'正常汇报，把事情说清楚就行',v:2},{t:'侃侃而谈，还会适当包装亮点',v:3}]},
+  {dim:'so2',q:'年终总结/述职报告你会怎么写？',
+   opts:[{t:'简单罗列做了什么事',v:1},{t:'详细列出成果和数据',v:2},{t:'精心包装，突出核心贡献和未来规划',v:3}]},
+  {dim:'so3',q:'下班后同事约饭/团建，你的态度通常是？',
+   opts:[{t:'能躲就躲，社恐发作',v:1},{t:'看心情，偶尔参加',v:2},{t:'积极参与，维护人际关系很重要',v:3}]},
+  {dim:'so3',q:'你和甲方/外部合作方的关系定位是？',
+   opts:[{t:'保持距离，公事公办就好',v:1},{t:'正常工作关系，不冷不热',v:2},{t:'保持良好互动，为后续合作铺路',v:3}]}
+];
+
+const TYPES={
+  PIE:{code:'PIE',name:'画饼忽悠王',full:'Pie-chart Promising King',color:'#e07850',
+    bio:'你是设计院里的"愿景架构师"，PPT做得比图纸还好。擅长用"概念""调性""空间叙事"等高大上的词汇把甲方忽悠得一愣一愣的。方案汇报永远光芒万丈，落地执行嘛……那是另一拨人的事了。你的核心竞争力不是设计能力，而是让所有人相信"这个方案一定能成"。说实话，没有你这种人在前面扛着，项目根本开不了张。',
+    traits:['画饼能力MAX','PPT王者','概念输出机','甩锅熟练度满级','存在感极强','实际产出≈0'],
+    vec:[3,3,3,2,1,3,3,3,1,2,3,2,3,3,3]},
+  FRAG:{code:'FRAG',name:'脆皮熬夜党',full:'Fragile Night Owl',color:'#5abfb5',
+    bio:'你是设计院里最让人心疼的存在。体检报告比你的图纸还厚，颈椎腰椎样样不落，发际线每天都在后退。明明身体已经在报警了，但你还是停不下来——因为你不熬，活就没法交。你的口头禅是"改完这一版我就睡"，然后天亮了你还在改第十八版。保温杯里泡的已经不是枸杞了，是你对生活的最后一点倔强。',
+    traits:['发际线危机','腰间盘突出预备役','咖啡因耐受极高','黑眼圈永久驻留','免疫力持续走低','熬夜冠军'],
+    vec:[1,2,1,3,3,1,2,1,2,1,2,1,2,1,1]},
+  TEFL:{code:'TEFL',name:'不粘锅大师',full:'Teflon Master',color:'#c49a30',
+    bio:'你是设计院里最滑溜的人，任何锅到你手上都会自动滑走。"这个不是我负责的范围""之前沟通过的不是这样的""我建议你问问XX"。你的职场生存法则就是：事可以做，锅绝对不背。你精通各种太极推手技巧，能把所有责任完美转移出去。同事们既佩服你的手段，又怕跟你搭项目——因为到最后活儿都是别人干的。',
+    traits:['太极宗师','锅底光滑度MAX','理由生成器','边界感极强','甩锅零痕迹','存活率100%'],
+    vec:[2,3,2,2,1,3,1,3,1,2,2,3,1,2,2]},
+  COPY:{code:'COPY',name:'套图艺术家',full:'Copy-Paste Artist',color:'#9589d6',
+    bio:'你是设计院里的"效率之神"，Ctrl+C/Ctrl+V是你的左右手。你的硬盘里存着过去十年所有项目的素材库，任何新需求都能在三分钟内找到"灵感来源"。你说这不叫抄袭叫"借鉴成熟经验"，你说这不叫偷懒叫"标准化作业"。老实说，如果没有你这种人，设计院的产能至少下降一半。虽然原创性约等于零，但谁在乎呢？甲方要的是速度。',
+    traits:['复制粘贴键磨损最快','素材库富可敌国','模板复用率99%','原创能力≈0','交付速度NO.1','改个logo就是新项目'],
+    vec:[2,2,2,2,2,2,2,2,2,3,3,2,2,2,2]},
+  CHAR:{code:'CHAR',name:'底薪慈善家',full:'Low-salary Philanthropist',color:'#e05a70',
+    bio:'你是设计院里最纯粹的灵魂，用爱发电的典范。拿着行业最低的工资，干着最累的活，还总是说"能学到东西就好"。你的善良让HR感动到流泪——终于找到一个愿意白干的人了。每次涨薪名单里都没有你，每次加班名单里第一个就是你。你不是不知道自己值更多，只是你总觉得"再等等吧，总会好的"。亲爱的，已经等了五年了。',
+    traits:['工资条常年感人','用爱发电永动机','涨薪绝缘体','加班积极分子','自我感动专家','老板的最爱'],
+    vec:[1,1,3,3,3,2,3,1,3,1,1,1,3,1,3]},
+  SCAP:{code:'SCAP',name:'苦逼背锅侠',full:'Scapegoat Knight',color:'#c96a48',
+    bio:'你是设计院里最冤枉的人。不管是谁犯的错、哪个环节出了问题，最后背锅的永远是你。"小X啊这个你来处理一下吧"——这句话你已经听了八百遍了。你的工位就是全院的"问题回收站"，所有没人愿意管的烂摊子最终都会流向你。你试图反抗过，但每次都被"你最靠谱了"这句话堵回来。你确实最靠谱——因为只有你从来不拒绝。',
+    traits:['全自动背锅系统','问题回收站站长','拒绝能力退化','靠谱=好欺负','存在感只在出事时','委屈但说不出口'],
+    vec:[1,2,2,3,3,1,3,1,3,1,2,1,2,1,2]},
+  MULE:{code:'MULE',name:'勤恳老黄牛',full:'Hardworking Mule',color:'#45b86a',
+    bio:'你是设计院的基石，沉默的大多数。不争不抢不抱怨，每天最早到最晚走，图纸一张接一张地出。你没有华丽的话术，没有高超的政治手腕，唯一的武器就是踏实肯干。领导嘴上说"要向XX学习"，转头就把升职机会给了那个会拍马屁的。你知道，但你不说。因为你相信——总有一天努力会被看见的吧？也许吧。',
+    traits:['默默耕耘','从不邀功','存在感极低','加班时长TOP3','性价比最高员工','升职永远轮不到'],
+    vec:[2,2,3,3,2,2,3,2,3,2,2,1,3,2,2]},
+  HOLE:{code:'HOLE',name:'专业填坑侠',full:'Professional Hole-filler',color:'#609fe0',
+    bio:'你是设计院里的"消防员"，哪里有坑你就出现在哪里。别人的方案有问题？你来修。上游数据出错？你来补。甲方临时变卦？你来兜底。你的技能树点满了所有专业——因为每个坑都需要不同的工具来填。表面上你是全能选手，实际上你是一个人干了三个人的活。没有你，这个院早就散架了。但你的职称评定材料里，写的全是"配合完成"。',
+    traits:['全能补位王','跨专业技能满点','救火队长','问题终结者','一人抵三人','功劳簿上查无此人'],
+    vec:[2,3,2,3,2,2,3,3,2,2,3,1,3,2,2]},
+  CHIL:{code:'CHIL',name:'反内卷先锋',full:'Anti-Rat-Race Champion',color:'#b88ed8',
+    bio:'你是设计院里的一股清流（或者泥石流，取决于谁在看）。到点下班雷打不动，周末微信不回，团建请假第一名。你早就看透了这套游戏规则——拼命干也不会涨多少工资，不如把时间花在自己身上。同事们私下里羡慕你的洒脱，面上说你"不够上进"。你笑笑不说话，因为他们不知道你下班后的副业收入已经是工资的三倍了。',
+    traits:['准点下班标杆','反PUA先锋','副业达人','精神状态领先','拒绝无效内卷','活得最通透'],
+    vec:[1,2,1,1,1,3,1,1,1,1,2,3,1,1,1]},
+  CAVE:{code:'CAVE',name:'社恐自闭人',full:'Cave Dweller',color:'#909090',
+    bio:'你是设计院里的隐形人，工位角落里的安静存在。开会永远坐最后一排，发言环节永远低头看手机，团建永远找借口溜走。你的社交能量全部用来应付必要的沟通了，多余的一个字都不想说。同事们对你的印象大概就是"那个戴耳机的"。但你的图纸质量一直很稳，因为所有的时间你都花在了屏幕前而不是茶水间。你不需要朋友，你需要的是不被打扰。',
+    traits:['社交能量≈0','耳机是本体','会议室隐身术','文字沟通大于语音','独处才是充电','靠谱的哑巴'],
+    vec:[1,2,1,2,2,2,2,1,2,2,2,2,1,1,1]}
+};
+
+let currentQ=0,answers={};
+
+function startQuiz(){
+  document.getElementById('home').style.display='none';
+  document.getElementById('quiz').style.display='block';
+  answers={};currentQ=0;
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderQuestion(){
+  const q=QUESTIONS[currentQ],dim=DIMENSIONS.find(d=>d.id===q.dim);
+  document.getElementById('qNum').textContent=currentQ+1;
+  document.getElementById('progressFill').style.width=((currentQ+1)/30*100)+'%';
+  const mt=document.getElementById('modelTag');
+  mt.textContent=dim.model+' '+dim.label;
+
+  const sel=answers[currentQ];
+  let h=`<div class="q-card fade-up">
+    <div class="q-dim-tag"><span class="q-dim-dot"></span>${dim.name} · ${dim.label}</div>
+    <div class="q-text">${currentQ+1}. ${q.q}</div>
+    <div class="opt-list">`;
+  const letters=['A','B','C'];
+  q.opts.forEach((o,i)=>{
+    const picked=sel===i?'selected':'';
+    h+=`<div class="opt-item ${picked}" onclick="pick(${i})">
+      <span class="opt-key">${letters[i]}</span>${o.t}</div>`;
+  });
+  h+='</div></div>';
+  document.getElementById('questionArea').innerHTML=h;
+  document.getElementById('prevBtn').disabled=currentQ===0;
+  document.getElementById('nextBtn').textContent=currentQ===29?'查看结果 →':'下一题 →';
+}
+
+function pick(i){answers[currentQ]=i;renderQuestion()}
+function nextQuestion(){if(currentQ<29){currentQ++;renderQuestion()}else calcResult()}
+function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion()}}
+
+function calcResult(){
+  const ds={};
+  DIMENSIONS.forEach(d=>ds[d.id]=0);
+  QUESTIONS.forEach((q,i)=>{if(answers[i]!==undefined)ds[q.dim]+=q.opts[answers[i]].v});
+  const uv=[];
+  DIMENSIONS.forEach(d=>{const s=ds[d.id];uv.push(s<=2?1:s<=3?2:3)});
+
+  const results=[];
+  Object.values(TYPES).forEach(t=>{
+    let td=0,em=0;
+    for(let i=0;i<15;i++){const d=Math.abs(uv[i]-t.vec[i]);td+=d;if(d===0)em++}
+    const sim=Math.round((1-td/30)*100);
+    results.push({code:t.code,name:t.name,color:t.color,bio:t.bio,traits:t.traits,td,em,sim,vec:t.vec,uv});
+  });
+  results.sort((a,b)=>a.td!==b.td?a.td-b.td:b.em-a.em);
+  showResult(results,uv);
+}
+
+function showResult(results,uv){
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('result').style.display='block';
+
+  const t=results[0],rc=document.getElementById('resultCard');
+  document.getElementById('accentBar').style.background=t.color;
+  document.getElementById('resultCode').textContent=t.code;
+  document.getElementById('resultCode').style.color=t.color;
+  document.getElementById('resultName').textContent=t.name;
+  document.getElementById('resultBio').textContent=t.bio;
+
+  let th='';
+  t.traits.forEach(tr=>th+=`<div class="trait-cell"><div class="trait-cell-text">${tr}</div></div>`);
+  document.getElementById('traitGrid').innerHTML=th;
+
+  let rh='<div class="ranking-h">完整匹配排行</div>';
+  results.slice(0,10).forEach((r,i)=>{
+    const top=i===0?'top-rank':'';
+    rh+=`<div class="rank-row ${top}">
+      <span class="rank-num n${i<3?i+1:3}">${i+1}</span>
+      <span class="rank-name" style="color:${r.color}">${r.code} ${r.name}</span>
+      <div class="rank-meter"><div class="rank-fill" style="width:${r.sim}%;background:${r.color}"></div></div>
+      <span class="rank-pct">${r.sim}%</span></div>`;
+  });
+  document.getElementById('matchList').innerHTML=rh;
+
+  let dh='<div class="dim-h">你的15维人格画像</div>';
+  const lm={1:'L',2:'M',3:'H'};
+  DIMENSIONS.forEach((d,i)=>{
+    dh+=`<div class="dim-line">
+      <span class="dim-n">${d.name}</span>
+      <span class="dim-badge ${lm[uv[i]]}">${lm[uv[i]]}</span>
+      <div class="dim-track"><div class="dim-fill" style="width:${uv[i]*33.33}%;background:${['#30d158','#b8860b','#ff6b35'][uv[i]-1]}"></div></div></div>`;
+  });
+  document.getElementById('dimDetail').innerHTML=dh;
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){
+  document.getElementById('result').style.display='none';
+  document.getElementById('home').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
