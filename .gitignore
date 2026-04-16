@@ -41,3 +41,6 @@ MinerU/
 *.md
 !sdti/README.md
 !sdti/index.html
+
+# Symlinks
+Obsidian知识库/
