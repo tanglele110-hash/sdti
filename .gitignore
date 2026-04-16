@@ -39,6 +39,5 @@ MinerU/
 .trae/
 *.py
 *.md
-!README.md
-!sdti.html
-!index.html
+!sdti/README.md
+!sdti/index.html
